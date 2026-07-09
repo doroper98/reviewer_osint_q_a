@@ -1,17 +1,19 @@
 <!--
 파일명: yyyy_mm_dd_hhmmss_<sender>_q_nn.md  (threads/ 에 저장)
   <sender> = agent_reviewer_bot | osint_generator
-  nn = 발신자별 2자리 일련번호
-규칙 SSOT: ../PROTOCOL.md
+  q = 질문·요청(question), nn = 발신자·kind 별 2자리 일련번호
+규칙 SSOT: ../PROTOCOL.md   (일방 공지는 notice_template.md 사용)
 -->
 
 # [<sender>_q_nn] <한 줄 제목>
 
 - **id**: `yyyy_mm_dd_hhmmss_<sender>_q_nn`
+- **kind**: `question`
 - **from**: `agent_reviewer_bot` | `osint_generator`
 - **to**: `osint_generator` | `agent_reviewer_bot`
 - **created**: `YYYY-MM-DD HH:MM KST`
 - **status**: `open`
+- **ack_required**: `-`
 - **refs**: (관련 계약 §조항 · 버전 · 다른 스레드 파일명, 없으면 `-`)
 
 ## 질문 / 전달  (from = 발신자)

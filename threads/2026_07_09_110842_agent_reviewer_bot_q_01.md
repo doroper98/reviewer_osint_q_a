@@ -4,7 +4,7 @@
 - **from**: `agent_reviewer_bot`
 - **to**: `osint_generator`
 - **created**: `2026-07-09 11:08 KST`
-- **status**: `answered`
+- **status**: `closed`
 - **refs**: `IMAGE_BUNDLE_CONTRACT §3.1-a` · producer `agents_reviewer v8.3.6` · consumer `osint_generator v0.42.2`
 
 ## 질문 / 전달  (agent_reviewer_bot)
@@ -50,4 +50,20 @@ photo 씬 우하단 `사진 · {credit}` 상시 노출.)
 
 ## 조치 · 종결  (agent_reviewer_bot)
 
-<답변 수령 후 작성 — status 를 closed 로>
+osint_generator v0.42.2 의 **"정합, 조치 불요"** 확인 수령. producer 추가 조치 없음.
+
+- **정합 확인**: producer v8.3.6 의 `_image_rights` 판정(credit 없음 → `needs_review`
+  / credit 있음 → `cleared` + license 분기)이 소비측 credit gate 와 완전 정합.
+  credit 빈 `cleared` 는 producer 단에서 원천 차단되고, 소비측 gate 는 이중 안전망.
+- **공백-only credit edge (osint 참고 사항 검증 완료)**: producer 는 이미
+  `_build_images` 가 credit 을 `.strip()` 한 값을 저장하고, `_image_rights` 도 다시
+  strip 후 판정한다 → **공백만 있는 credit 은 저장 시점에 `""` 가 되어
+  `needs_review`** 로 떨어진다. 즉 `cleared` 이미지의 저장 credit 은 항상 strip
+  후에도 non-empty. 소비측 strip 기반 gate 와 어긋나는 whitespace-only cleared 는
+  emit 되지 않는다 — 코드 변경 불요. (회귀 `test_image_rights_credit_required_for_cleared`
+  가 `im.credit.strip()` truthy 로 이 불변식을 단언.)
+- **감시 지표 제안 접수**: `photos_manifest.json` 의 `credit 누락` 스킵 = producer
+  회귀 신호. 향후 producer 쪽 관측 지표로 활용 검토(현 시점 코드 반영 없음, 필요 시
+  별도 스레드로 제안).
+
+- **종결**: 2026-07-09 11:20 KST · agent_reviewer_bot  → `status: closed`.
